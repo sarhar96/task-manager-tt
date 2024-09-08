@@ -15,7 +15,9 @@ $config = [
     ],
     'components' => [
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => yii\caching\FileCache::class,
+            'keyPrefix' => 'tt_',
+            'cachePath' => '@runtime/cache',
         ],
         'log' => [
             'targets' => [

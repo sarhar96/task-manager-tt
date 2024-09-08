@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'adminEmail' => 'admin@example.com',
-    'senderEmail' => 'noreply@example.com',
-    'senderName' => 'Example.com mailer',
+    'pageSize' => 20,
+    'cacheDuration' => 3600, //  Длительность кэша в секундах
 ];
