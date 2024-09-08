@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\caching\TagDependency;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
@@ -89,8 +90,21 @@ class Task extends \yii\db\ActiveRecord
         $this->save();
     }
 
-    public static function find(): ActiveQuery
+
+    /**
+     * @param $insert
+     * @param $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes): void
     {
-        return parent::find()->orderBy(['title' => SORT_ASC]);
+        parent::afterSave($insert, $changedAttributes);
+        TagDependency::invalidate(Yii::$app->cache, 'task_cache');
     }
+
+    public function afterDelete(): void
+    {
+        parent::afterDelete();
+        TagDependency::invalidate(Yii::$app->cache, 'task_cache');
+    }
+
 }

@@ -5,7 +5,6 @@ namespace app\controllers;
 use app\models\Task;
 use app\models\TaskSearch;
 use yii\db\Exception;
-use yii\db\StaleObjectException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

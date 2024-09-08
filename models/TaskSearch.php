@@ -2,9 +2,9 @@
 
 namespace app\models;
 
-use yii\base\Model;
+use Yii;
+use yii\caching\TagDependency;
 use yii\data\ActiveDataProvider;
-use app\models\Task;
 
 /**
  * TaskSearch represents the model behind the search form of `app\models\Task`.
@@ -24,15 +24,6 @@ class TaskSearch extends Task
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function scenarios(): array
-    {
-        // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
-    }
-
-    /**
      * Creates data provider instance with search query applied
      *
      * @param array $params
@@ -43,29 +34,29 @@ class TaskSearch extends Task
     {
         $query = Task::find();
 
-        // add conditions that should always apply here
+        $query->cache(Yii::$app->params['cacheDuration'], new TagDependency(['tags' => ['task_cache']]));
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => ['title' => SORT_ASC],
+            ],
+            'pagination' => [
+                'pageSize' => Yii::$app->params['pageSize'],
+            ]
         ]);
 
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'due_date' => $this->due_date,
             'status' => $this->status,
             'priority' => $this->priority,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'deleted_at' => $this->deleted_at,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])

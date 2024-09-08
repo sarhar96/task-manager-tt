@@ -26,6 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -35,7 +36,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'due_date',
             'status',
             'priority',
-            'deleted_at',
+            [
+                'attribute' => 'deleted_at',
+                'label' => 'Deleted At',
+                'filter' => false,
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Task $model, $key, $index, $column) {
